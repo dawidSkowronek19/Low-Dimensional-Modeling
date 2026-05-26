@@ -17,6 +17,14 @@ create missing output folders, and failing to create them may result in a segmen
 Additionally, each project folder contains a PDF file, which serves as a comprehensive report detailing the completed 
 assignment, methodology, and results.
 
+
+To ensure all projects work correctly, the following dependencies are required:
+
+    Eigen library
+
+    GSL (GNU Scientific Library)
+
+
 ************************************
 project01
 
@@ -132,3 +140,20 @@ all active transverse modes at a given Fermi energy using the Landauer formula.
 * **Data Export:** Automatically saves the conductance vs. energy characteristics and the 2D potential map to text 
 files for further visualization and analysis.
 
+************************************
+project07
+
+requires ./outdir
+
+
+This repository contains two C++ implementations using the **Eigen** library to solve the 1D Schrödinger equation for a periodic crystal lattice and plot electronic band structures E(k).
+
+### Code 1: LCAO / Tight-Binding Method
+* **Approach:** Solves the Schrödinger equation for a *single isolated well* first to get localized wavefunctions Psi. Then, it builds the periodic crystal potential and projects the Hamiltonian onto this localized basis.
+* **Math/Solver:** Computes dense Hamiltonian ($H$) and Overlap ($S$) matrices for each $k$-point, then solves the **Generalized Eigenproblem** ($HC = SC\epsilon$) using `Eigen::GeneralizedSelfAdjointEigenSolver`.
+* **Output:** Generates local wavefunctions and Saves the energy bands to `epsilon.dat`.
+
+### Code 2: Direct Finite Difference with Periodic Boundary Conditions
+* **Approach:** Solves the equation directly on a real-space grid representing a single unit cell. It incorporates the Bloch phase factor $e^{ikr}$ directly into the kinetic energy operator (gauge transformation).
+* **Math/Solver:** Constructs a $k$-dependent tridiagonal matrix with periodic boundaries using **Sparse Matrices** (`Eigen::SparseMatrix`). It diagonalizes the system at each $k$-step using `Eigen::SelfAdjointEigenSolver`.
+* **Output:** Saves the computed energy bands to `bands.dat`.
